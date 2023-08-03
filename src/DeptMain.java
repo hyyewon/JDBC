@@ -16,6 +16,8 @@ public class DeptMain {
 			System.out.println("1. 전체목록");
 			System.out.println("2. 저장하기");
 			System.out.println("3. 수정하기");
+			System.out.println("4. 삭제하기");
+			System.out.println("5. 삭제 및 수정하기");
 			System.out.println("0. 종료");
 			System.out.println("--------------------");
 			String num = scan.nextLine();
@@ -64,6 +66,33 @@ public class DeptMain {
 						new DeptServiceImpl();
 				int n = service.update(dto);
 				System.out.println(n+" 개가 수정 되었습니다");
+				
+			}else if("4".equals(num)) {
+				System.out.println("삭제할 부서번호를 입력하시오");
+				String deptno = scan.next();
+				DeptDTO dto = new DeptDTO(Integer.parseInt(deptno));
+				//Service 연동
+				DeptService service = new DeptServiceImpl();
+				int n = service.delete(dto);
+				System.out.println(n+" 개가 삭제 되었습니다.");
+				
+			}else if("5".equals(num)) { //두가지 기능이 하나처럼 동작
+				//삭제 및 수정
+				//수정할 데이터
+				System.out.println("수정할 부서번호를 입력하시오");
+				String deptno = scan.next();
+				System.out.println("수정할 부서명를 입력하시오");
+				String dname = scan.next();
+				System.out.println("수정할 부서위치를 입력하시오");
+				String loc = scan.next();
+				DeptDTO dto = new DeptDTO(Integer.parseInt(deptno), dname, loc);
+				//삭제할 데이터
+				System.out.println("삭제할 부서번호를 입력하시오");
+				String deptno2 = scan.next();
+				//Service 연동
+				DeptService service = new DeptServiceImpl();
+				int n = service.updateAndDelete(dto, Integer.parseInt(deptno2));
+				System.out.println(n+" 개가 수정 및 삭제 되었습니다.");
 				
 				
 			}else if("0".equals(num)) {

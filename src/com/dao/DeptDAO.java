@@ -87,7 +87,7 @@ public class DeptDAO {
 	    	e.printStackTrace();
 	    }finally {
 			try {
-				if(pstmt != null)pstmt.close();
+				if(pstmt != null)pstmt.close(); //런타임예외가 발생하지 않도록 조건문 설정
 			} catch (SQLException e) { 
 				e.printStackTrace(); 
 			}
@@ -95,7 +95,24 @@ public class DeptDAO {
 		return num;
 	}
 	
-	
+	public int delete(Connection con, DeptDTO dto) {
+		int num = 0;
+		PreparedStatement pstmt = null; //finally에서 필요하기 때문에 try블럭 밖에서 선언
+		try {
+			String sql = "delete from dept where deptno=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, dto.getDeptno());
+			num = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			} 
+		}return num;
+	}
 
 	
 }

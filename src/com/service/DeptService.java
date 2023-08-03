@@ -14,5 +14,9 @@ public interface DeptService {
 	//DML
 	public int insert(DeptDTO dto) throws DuplicatedDeptnoException;
 	public int update(DeptDTO dto);
+	public int delete(DeptDTO dto);
+	
+	//수정 및 삭제 처리하는 메서드
+	public int updateAndDelete(DeptDTO dto, int deptno);
 
 }
