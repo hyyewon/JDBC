@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DeptDynamicMapper">
+
+	<select id="selectByDeptnoMulti" resultType="DeptDTO"
+		parameterType="arrayList"> <!-- 별칭으로 사용하기 -->
+		select deptno, dname, loc
+		from dept
+		where deptno IN
+		<foreach item="item" collection="list" open=" (" separator=","
+			close=")">
+			#{item} <!--값만 전달 -->
+		</foreach>
+		order by 1
+	</select>
+
+	<select id="selectByDeptnoMulti2" resultType="DeptDTO"
+		parameterType="arrayList"> <!-- 별칭으로 사용하기 -->
+		select deptno, dname, loc
+		from dept
+		<where>
+			<foreach item="item" collection="list" open="deptno IN ("
+				separator="," close=")">
+				#{item.deptno} <!-- DTO에 전달했기 때문에 DTO안에 있는 값을 얻어와야 함 -->
+			</foreach>
+		</where>
+		order by 1
+	</select>
+
+	<delete id="deleteMulti" parameterType="arrayList">
+		delete from dept
+		<where>
+			<foreach item="item" collection="list" open="deptno IN ("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</delete>
+
+	<update id="updateMulti" parameterType="arrayList">
+		update dept set dname='개발'
+		<where>
+			<foreach item="item" collection="list" open="deptno IN ("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</update>
+
+	<insert id="insertMulti" parameterType="arrayList">
+		insert all
+		<foreach item="item" collection="list">
+			into dept (deptno,
+			dname, loc)
+			values ( #{item.deptno}, #{item.dname}, #{item.loc} )
+		</foreach>
+		select * from dual <!-- 문법자체가 서브쿼리가 필요하기 때문에 아무 의미 없지만 써주어야 함 -->
+
+	</insert>
+
+	<select id="selectAllorDname" resultType="DeptDTO"
+		parameterType="string">
+		select deptno, dname, loc
+		from dept
+		<where>
+			<if test="dname != null">
+				dname = #{dname}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByDnameChoose" resultType="DeptDTO"
+		parameterType="hashmap">
+		select deptno, dname, loc
+		from dept
+		<where>
+			<choose>
+				<when test="dname == 'ACCOUNTING'">
+					deptno IN (10,20,30)
+				</when>
+				<when test="dname == 'RESEARCH'">
+					deptno = 40
+				</when>
+				<otherwise>
+					deptno IN (60,70,80)
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="StudentMapper">
+
+  <select id="selectAllStudent" resultType="StudentDTO">
+    select student_no stuNo,
+	    student_name stuName,
+	    substr(student_ssn,1,8) || '*******' StuSsn,
+	    substr(student_address,1,10) || '...' stuAddress,
+	    to_char(entrance_date,'yyyy/mm/dd') entDate,
+	    absence_yn absYn
+		from tb_student order by 1
+  </select>
+  
+  
+  
+</mapper>
